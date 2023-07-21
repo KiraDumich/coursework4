@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 import json
 import requests
 
@@ -55,7 +55,8 @@ class Superjob(API):
                 "archive": False
             }
             headers = {
-                "X-Api-App-Id": "v3.r.137694851.146a23e73bd9e59150c0105879f8017913a39b86.b6b0a759a7c84c058bf9c757bc5bbfc0c40911d9"
+                "X-Api-App-Id": "v3.r.137694851.146a23e73bd9e59150c0105879f8017913a39b86"
+                                ".b6b0a759a7c84c058bf9c757bc5bbfc0c40911d9 "
             }
             response = requests.get(url, headers=headers, params=parametr).json()
             self.vacansies.extend(response['objects'])
@@ -82,8 +83,14 @@ class Vacancy:
     def __init__(self, vacansy):
         self.name = vacansy['name']
         self.area = vacansy['area']
-        self.salary_from = vacansy['salary_from']
-        self.salary_to = vacansy['salary_to']
+        if vacansy['salary_from'] is None:
+            self.salary_from = 0
+        else:
+            self.salary_from = vacansy['salary_from']
+        if vacansy['salary_to'] is None:
+            self.salary_to = 0
+        else:
+            self.salary_to = vacansy['salary_to']
         self.url = vacansy['url']
         self.employer = vacansy['employer']
         self.requirement = vacansy['requirement']
@@ -114,20 +121,16 @@ class JSON:
 
     def all_data(self):
 
-        with open(self.filename, 'r') as f:
+        with open(self.filename, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        vacansy_data = [Vacancy(x) for x in data]
+        vacansy_data = []
+        for x in data:
+            vacansy_data.append(Vacancy(x))
         return vacansy_data
 
-    def sorted_by_salary(self) -> list:
+    def sorted_by_salary(self):
         """Сортирует вакансии по возрастанию зарплаты"""
 
-        vacansy_data = self.all_data()
-        data = sorted(vacansy_data)
-        return data
-
-
-
-
-
-
+        data = self.all_data()
+        d = sorted(data)
+        return d
