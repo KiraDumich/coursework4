@@ -9,7 +9,7 @@ def main():
     super_job = Superjob(key)
 
     while True:
-        answer = input('Выберите платформу для поиска вакансий:\na.hh.ru\nb.superjob.ru')
+        answer = input('Выберите платформу для поиска вакансий:\na.hh.ru\nb.superjob.ru\n')
         if answer == 'a':
             hh.get_request()
             vacansies = hh.get_formatted_vacancies()
@@ -24,13 +24,17 @@ def main():
 
     # Выборка вакансий
     while True:
-        action = input('1.Вывести всё\n2.Отсортировать по зарплате\n')
-        if action == '1':
+        answer = input('1. Вывести всё\n2. Отсортировать по зарплате\n3. Получить топ пять вакансий\n')
+        if answer == '1':
             json_all = js.all_data()
             for i in json_all:
                 print(i)
-        if action == '2':
+        if answer == '2':
             json_sorted = js.sorted_by_salary()
+            for i in json_sorted:
+                print(i)
+        if answer == '3':
+            json_sorted = js.get_5()
             for i in json_sorted:
                 print(i)
 
