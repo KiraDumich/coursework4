@@ -4,6 +4,7 @@ import requests
 
 
 class API(ABC):
+    """Абстрактный класс для работы с API сайтов с вакансиями"""
     def __init__(self, key):
         self.key = key
         self.vacansies = []
@@ -79,7 +80,7 @@ class Superjob(API):
 
 
 class Vacancy:
-
+    """Класс для работы с информацией о вакансии"""
     def __init__(self, vacansy):
         self.name = vacansy['name']
         self.area = vacansy['area']
@@ -134,3 +135,8 @@ class JSON:
         data = self.all_data()
         d = sorted(data)
         return d
+
+    def get_5(self):
+        data = self.all_data()
+        request_5 = sorted(data, reverse=True)[:5]
+        return request_5
